@@ -11,22 +11,22 @@
         @focus="resetError"
       />
       <ul class="validation-errors">
-        <li v-if="!validation.email.format">メールアドレスの形式が不正です</li>
-        <li v-if="!validation.email.required">メールアドレスが入力されていません</li>
+        <li v-if="!validation.email.format">メールアドレスの形式が不正です。</li>
+        <li v-if="!validation.email.required">メールアドレスが入力されていません。</li>
       </ul>
     </div>
     <div class="form-item">
-      <label for="password">パスワード</label>
+      <label for="passowrd">パスワード</label>
       <input
+        id="password"
         v-model="password"
         type="password"
         autocomplete="off"
-        placeholder="例: xxxx"
+        placeholder="例: xxxxxxxx"
         @focus="resetError"
       />
-      <ul class="va" />
       <ul class="validation-errors">
-        <li v-if="!validation.password.required">パスワードが入力されていません</li>
+        <li v-if="!validation.password.required">パスワードが入力されていません。</li>
       </ul>
     </div>
     <div class="form-actions">
@@ -39,10 +39,9 @@
 
 <script>
 // KbnButtonをインポート
-import KbnButton from "@/components/atoms/KbnButton"
+import KbnButton from "@/components/atoms/KbnButton.vue"
 // メールアドレスのフォーマットをチェックする正規表現
 const REGEX_EMAIL = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-// 文字列が空ならfalseになる
 const required = val => !!val.trim()
 
 export default {
@@ -70,7 +69,7 @@ export default {
 
   computed: {
     validation() {
-      // emailとパスワードのバリデーション
+      // emailとpasswordのバリデーション
       return {
         email: {
           required: required(this.email),
@@ -83,13 +82,11 @@ export default {
     },
 
     valid() {
-      const validation = this.validation // computedに定義したvalidationを用いて可否を返す
+      const validation = this.validation // 先に定義したvalidationを用いて可否を返す
       const fields = Object.keys(validation)
       let valid = true
       for (let i = 0; i < fields.length; i++) {
         const field = fields[i]
-
-        // フィールドに定義されたすべての項目がtrueならvalidである
         valid = Object.keys(validation[field]).every(
           key => validation[field][key]
         )
@@ -102,8 +99,6 @@ export default {
 
     disableLoginAction() {
       // validを使ってログイン処理の可否、progressは後述
-      // disable属性なので、trueなら「無効」、falseなら「有効」となる。
-      // 2重否定のロジックなので直感的でないことに注意
       return !this.valid || this.progress
     }
   },
@@ -118,7 +113,7 @@ export default {
         return
       } // 不備があればログイン処理が実行されないようガード
 
-      this.progress = true // ログイン処理を表す
+      this.progress = true // ログイン処理実行中をあらわす
       this.error = ""
 
       this.$nextTick(() => {

@@ -40,7 +40,7 @@ describe('loginアクション', () => {
       expect(commit.called).to.equal(true)
       expect(commit.args[0][0]).to.equal(types.AUTH_LOGIN)
       expect(commit.args[0][1].token).to.equal(token)
-      expect(commit.args[0][2].userId).to.equal(userId)
+      expect(commit.args[0][1].userId).to.equal(userId)
     })
   })
 

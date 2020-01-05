@@ -14,7 +14,7 @@ describe('KbnLoginForm', () => {
 
       describe('email', () => {
         describe('required', () => {
-          describe('何も入力されてない', () => {
+          describe('何も入力されていない', () => {
             it('validation.email.requiredがinvalidであること', () => {
               loginForm.setData({ email: '' })
               expect(loginForm.vm.validation.email.required).to.equal(false)
@@ -30,15 +30,15 @@ describe('KbnLoginForm', () => {
         })
 
         describe('format', () => {
-          describe('email形式でないフォーマット', () => {
+          describe('メールアドレス形式でないフォーマット', () => {
             it('validation.email.formatがinvalidであること', () => {
               loginForm.setData({ email: 'foobar' })
               expect(loginForm.vm.validation.email.format).to.equal(false)
             })
           })
 
-          describe('email形式のフォーマット', () => {
-            it('validation.email.formatがvalidであること', () => {
+          describe('メールアドレス形式のフォーマット', () => {
+            it('validation.email.requiredがvalidであること', () => {
               loginForm.setData({ email: 'foo@domain.com' })
               expect(loginForm.vm.validation.email.format).to.equal(true)
             })
@@ -48,7 +48,7 @@ describe('KbnLoginForm', () => {
 
       describe('password', () => {
         describe('required', () => {
-          describe('何も入力されてない', () => {
+          describe('何も入力されていない', () => {
             it('validation.password.requiredがinvalidであること', () => {
               loginForm.setData({ password: '' })
               expect(loginForm.vm.validation.password.required).to.equal(false)
@@ -74,7 +74,7 @@ describe('KbnLoginForm', () => {
         loginForm.vm.$nextTick(done)
       })
 
-      describe('バリデーション項目すべてOK', () => {
+      describe('バリデーション項目全てOK', () => {
         it('validになること', () => {
           loginForm.setData({
             email: 'foo@domain.com',
@@ -85,10 +85,10 @@ describe('KbnLoginForm', () => {
       })
 
       describe('バリデーションNG項目あり', () => {
-        it('invalidとなること', () => {
+        it('invalidになること', () => {
           loginForm.setData({
-            email: '',
-            password: '12345678'
+            email: 'foo@domain.com',
+            password: ''
           })
           expect(loginForm.vm.valid).to.equal(false)
         })
@@ -114,7 +114,7 @@ describe('KbnLoginForm', () => {
         })
       })
 
-      describe('バリデーション項目すべてOKかつログイン処理中ではない', () => {
+      describe('バリデーション項目全てOKかつログイン処理中ではない', () => {
         it('ログイン処理は有効', () => {
           loginForm.setData({
             email: 'foo@domain.com',
@@ -124,7 +124,7 @@ describe('KbnLoginForm', () => {
         })
       })
 
-      describe('バリデーション項目すべてOKかつログイン処理中', () => {
+      describe('バリデーション項目全てOKかつログイン処理中', () => {
         it('ログイン処理は無効', () => {
           loginForm.setData({
             email: 'foo@domain.com',
@@ -153,7 +153,7 @@ describe('KbnLoginForm', () => {
 
       describe('resolve', () => {
         it('resolveされること', done => {
-          onloginStub.resolves()
+          onloginStub.resolves() // 無名のPromiseオブジェクトを返す
 
           // クリックイベント
           loginForm.find('button').trigger('click')
@@ -167,9 +167,11 @@ describe('KbnLoginForm', () => {
             const authInfo = onloginStub.args[0][0]
             expect(authInfo.email).to.equal(loginForm.vm.email)
             expect(authInfo.password).to.equal(loginForm.vm.password)
+            // resolve内での状態の反映
             loginForm.vm.$nextTick(() => {
-              // resolve内での状態の反映
-              expect(loginForm.vm.error).to.equal('') // エラーメッセージは初期のまま
+              expect(loginForm.vm.error).to.equal('') // エラーメッセージは初期化のまま
+              expect(loginForm.vm.progress).to.equal(false)
+              expect(loginForm.vm.valid).to.equal(true)
               expect(loginForm.vm.disableLoginAction).to.equal(false) // ログインアクションは可能
               done()
             })
@@ -183,7 +185,7 @@ describe('KbnLoginForm', () => {
 
           // クリックイベント
           loginForm.find('button').trigger('click')
-          expect(onloginStub.called).to.equal(false) // まだrejectされてない
+          expect(onloginStub.called).to.equal(false) // まだrejectされない
           expect(loginForm.vm.error).to.equal('') // エラーメッセージは初期化
           expect(loginForm.vm.disableLoginAction).to.equal(true) // ログインアクションは不可
 
@@ -194,7 +196,6 @@ describe('KbnLoginForm', () => {
             expect(authInfo.email).to.equal(loginForm.vm.email)
             expect(authInfo.password).to.equal(loginForm.vm.password)
             loginForm.vm.$nextTick(() => {
-              // resolve内での状態の反映
               expect(loginForm.vm.error).to.equal('login error!') // エラーメッセージが設定される
               expect(loginForm.vm.disableLoginAction).to.equal(false) // ログインアクションは可能
               done()
