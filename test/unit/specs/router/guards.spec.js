@@ -24,7 +24,7 @@ const mockAuthorizeToken = store => {
   const storeMock = injector({
     '../store': store
   })
-  return storeMock.mockAuthorizeToken
+  return storeMock.authorizeToken
 }
 
 // Vueアプリケーションをセットアップするヘルパー関数

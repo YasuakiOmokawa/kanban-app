@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import KbnLoginForm from "@/components/molecules/KbnLoginForm.vue"
+import KbnLoginForm from "@/components/molecules/KbnLoginForm.vue";
 
 export default {
   name: "KbnLoginView",
@@ -20,15 +20,15 @@ export default {
       return this.$store
         .dispatch("login", authInfo)
         .then(() => {
-          this.$router.push({ path: "/" })
+          this.$router.push({ path: "/" });
         })
-        .catch(err => this.throwReject(err))
+        .catch(err => this.throwReject(err));
     },
     throwReject(err) {
-      return Promise.reject(err)
+      return Promise.reject(err);
     }
   }
-}
+};
 </script>
 
 <style scoped>

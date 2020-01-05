@@ -20,9 +20,8 @@ describe('KbnLoginView', () => {
     loginForm.vm.onlogin('foo@domain.com', '12345678')
   }
 
-  // 各テスト実行前に実行されるフック関数
   beforeEach(() => {
-    // KbnLoginFormコンポーネントのスタブ設定
+    // KbnLoginFormコンポーネントのスタブの設定
     LoginFormComponentStub = {
       name: 'KbnLoginForm',
       props: ['onlogin'],
