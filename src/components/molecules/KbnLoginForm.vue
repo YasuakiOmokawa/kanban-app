@@ -20,7 +20,7 @@
       </ul>
     </div>
     <div class="form-item">
-      <label for="passowrd">パスワード</label>
+      <label for="password">パスワード</label>
       <input
         id="password"
         v-model="password"
